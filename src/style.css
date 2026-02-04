@@ -1,0 +1,695 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.App {
+  min-height: calc(100vh - 80px); /* navbar height accounted for */
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 80px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.books {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  justify-items: center;
+  align-items: stretch;
+  align-content: start;
+}
+
+.book {
+  width: 100%;
+  max-width: 280px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+  align-items: center;
+  height: 100%;
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 6px;
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.book img {
+  display: block;
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.book p {
+  flex-grow: 1;
+}
+
+.book .delete,
+.book .update {
+  margin-top: auto;
+}
+
+.book h2 {
+  text-align: center;
+  width: 100%;
+}
+
+.delete {
+  border: none;
+  padding: 3px 6px;
+  background-color: white;
+  cursor: pointer;
+  border: 1px solid rgb(245, 191, 191);
+  color: rgb(242, 100, 100);
+}
+
+.update {
+  border: none;
+  padding: 3px 6px;
+  background-color: white;
+  cursor: pointer;
+  border: 1px solid rgb(204, 204, 243);
+  color: rgb(139, 139, 234);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input {
+  width: 250px;
+  padding: 10px;
+  border: 1px solid gray;
+}
+
+.formButton {
+  border: none;
+  padding: 10px;
+  background-color: lightcoral;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.loginButton {
+  border: none;
+  padding: 10px;
+  background-color: rgb(0, 255, 200);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #4b4b4b;
+  color: white;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+}
+
+.nav-left .logo {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.nav-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 1;
+}
+
+.nav-right a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-right a:hover {
+  text-decoration: underline;
+}
+
+.logout-btn {
+  background-color: crimson;
+  border: none;
+  padding: 6px 12px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cta-btn {
+  margin-top: 16px;
+  padding: 10px 18px;
+
+  background: #222;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.cta-btn:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+mark {
+  background-color: #ffe58a;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* PUSH CONTENT BELOW FIXED NAVBAR */
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  max-width: 160px;
+  border-radius: 10px;
+  height: 36px;
+}
+
+.search-and-filter-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* 🔑 keep everything aligned */
+  gap: 12px;
+}
+
+.active-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+
+  background: #4b4b4b; /* same as navbar */
+  border-radius: 10px;
+
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+/* Container that holds active filters */
+.active-filters-wrapper {
+  background: #3f3f3f; /* slightly darker/lighter than navbar */
+  border-radius: 10px;
+  padding: 6px 8px;
+  margin-top: 4px;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* This is the critical fix */
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  display: block;
+}
+
+.nav-menu {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background: #222;
+  display: none;
+  flex-direction: column;
+  margin-left: 16px;
+}
+
+.nav-menu a {
+  padding: 12px 16px;
+  color: white;
+  text-decoration: none;
+  border-top: 1px solid #333;
+}
+
+.nav-menu a,
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+}
+
+.nav-menu.open {
+  display: flex;
+}
+
+.pagination {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin-top: auto;
+  padding: 16px 0 20px;
+  background: white;
+  border-top: 1px solid #eee;
+
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: #555;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pagination-controls button {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-controls button.active {
+  background: #222;
+  color: white;
+  border-color: #222;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.page {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
+}
+
+.page-content:has(.book-detail) {
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-state {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  gap: 10px;
+  color: #555;
+}
+
+.empty-state h2 {
+  font-size: 22px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  max-width: 300px;
+}
+
+.book-detail {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  align-items: start;
+  justify-content: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.book-detail img {
+  width: 100%;
+  max-width: 300px;
+}
+
+.book-info .authors {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.book-info .genre {
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+.book-info .description {
+  margin-top: 1.5rem;
+  line-height: 1.6;
+}
+
+.book-info .meta {
+  margin-top: 2rem;
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+.book.reading {
+  border: 2px solid #4caf50;
+  background: linear-gradient(180deg, rgba(76, 175, 80, 0.08), transparent);
+}
+
+.book.reading::before {
+  content: "📖 Currently Reading";
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4caf50;
+  margin-bottom: 0.5rem;
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.filter-btn.active .filter-icon {
+  opacity: 0.9;
+}
+
+.filter-wrapper {
+  position: relative;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  background: #fff;
+  color: #222;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  min-width: 220px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  z-index: 2000;
+}
+
+.filter-dropdown .dropdown-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-dropdown button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-dropdown button:hover,
+.filter-dropdown button.active {
+  background: #f2f2f2;
+}
+
+.action-btn,
+.delete,
+.update {
+  border-radius: 999px; /* pill shape */
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.book-info .action-btn {
+  align-self: flex-start;
+  min-width: 220px;
+}
+
+.reading-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.cover-card img {
+  width: 100%;
+  max-width: clamp(220px, 30vw, 340px);
+  height: auto;
+}
+
+.cover-card img {
+  width: 100%;
+  max-width: clamp(220px, 30vw, 340px);
+  height: auto;
+}
+
+.info-card {
+  width: 100%;
+  max-width: clamp(320px, 60vw, 700px);
+}
+
+.book-info .description {
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+}
+
+.active-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* spacing between chips & clear */
+  flex-wrap: wrap;
+}
+
+/* Individual filter pill */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* text ↔ close button */
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-radius: 999px; /* pill */
+  font-size: 12px;
+
+  padding: 4px 10px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* Close (✕) button */
+.filter-chip button {
+  background: rgba(0, 0, 0, 0.25);
+  border: none;
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%; /* circular */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 12px;
+
+  margin-left: 2px;
+}
+
+.filter-chip:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Clear all pill */
+.clear-chip {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Full navbar only on large tablets & desktop */
+@media (min-width: 1024px) {
+  .hamburger {
+    display: none;
+  }
+
+  .nav-menu {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    background: none;
+    width: auto;
+  }
+
+  .nav-menu a {
+    border: none;
+    padding: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .App {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
+
+@media (max-width: 900px) {
+  .active-filters {
+    max-width: 280px;
+  }
+}
+
+/* Mobile layout for Book Detail */
+@media (max-width: 1024px) {
+  .book-detail {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .book-info {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .book-info h1 {
+    margin-top: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .book-info .authors,
+  .book-info .genre,
+  .book-info .meta {
+    text-align: center;
+  }
+
+  .book-info .description {
+    margin-top: 1rem;
+    line-height: 1.6;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+
+  .book-info button {
+    width: 100%;
+  }
+
+  .book-info .action-btn {
+    width: auto;
+    min-width: 200px;
+    margin: 0.5rem auto;
+    display: block;
+    align-self: center;
+  }
+}
+
+/* Full navbar only on large tablets & desktop */
+@media (min-width: 1024px) {
+  .hamburger {
+    display: none;
+  }
+
+  .nav-menu {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    background: none;
+    width: auto;
+  }
+
+  .nav-menu a {
+    border: none;
+    padding: 0;
+  }
+}
