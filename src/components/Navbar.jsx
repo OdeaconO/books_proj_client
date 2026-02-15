@@ -1,10 +1,12 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { useAuth } from "../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
 import { api } from "../api";
 import { useSearchPagination } from "../hooks/useSearchPagination";
 import filterIcon from "../assets/filter-icon.svg";
+import Sidebar from "./Sidebar";
+import homeIcon from "../assets/home-icon.svg";
+import hamIcon from "../assets/ham-icon.svg";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,7 +15,6 @@ const Navbar = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRef = useRef(null); // To close dropdown when clicking outside
 
-  const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -78,10 +79,6 @@ const Navbar = () => {
     });
   };
 
-  const handleLogout = () => {
-    logout();
-  };
-
   // STEP 4: Clear all filters helper
   const clearAllFilters = () => {
     setSearchParams({});
@@ -98,218 +95,193 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
-      {/* LEFT */}
-      <div className="nav-left">
-        <Link to="/books" className="logo">
-          📚 Paper Town
-        </Link>
-      </div>
+    <>
+      <nav className="navbar">
+        {/* LEFT */}
+        <div className="nav-left">
+          <button className="hamburger" onClick={() => setMenuOpen(true)}>
+            <img src={hamIcon} alt="Menu" />
+          </button>
 
-      {/* RIGHT */}
-      <div className="nav-right">
-        <div className="search-and-filter-container">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (location.pathname !== "/books") {
-                navigate(`/books?q=${searchQuery}&page=1`);
-              }
-            }}
-            className="search-form"
-          >
-            {/* STEP 1 & 2: Replaced <select> with Button + Dropdown */}
-            <div className="filter-wrapper" ref={filterRef}>
-              <button
-                type="button"
-                className={`filter-btn ${filterOpen ? "active" : ""}`}
-                onClick={() => setFilterOpen((prev) => !prev)}
-                title="Filter & Sort"
-                aria-expanded={filterOpen}
-              >
-                <img src={filterIcon} alt="Filter" className="filter-icon" />
-              </button>
+          <Link to="/books" className="home-icon">
+            <img src={homeIcon} alt="Home" />
+          </Link>
+        </div>
 
-              {filterOpen && (
-                <div className="filter-dropdown">
-                  <div className="dropdown-section">
-                    <h4>Sort By</h4>
-                    <button
-                      type="button"
-                      className={
-                        currentSort === "created_at" && currentOrder === "desc"
-                          ? "active"
-                          : ""
-                      }
-                      onClick={() => {
-                        setSort("created_at", "desc");
-                        setFilterOpen(false);
-                      }}
-                    >
-                      Newest added
-                    </button>
-                    <button
-                      type="button"
-                      className={
-                        currentSort === "created_at" && currentOrder === "asc"
-                          ? "active"
-                          : ""
-                      }
-                      onClick={() => {
-                        setSort("created_at", "asc");
-                        setFilterOpen(false);
-                      }}
-                    >
-                      Oldest added
-                    </button>
-                    <button
-                      type="button"
-                      className={
-                        currentSort === "title" && currentOrder === "asc"
-                          ? "active"
-                          : ""
-                      }
-                      onClick={() => {
-                        setSort("title", "asc");
-                        setFilterOpen(false);
-                      }}
-                    >
-                      A–Z
-                    </button>
-                    <button
-                      type="button"
-                      className={
-                        currentSort === "title" && currentOrder === "desc"
-                          ? "active"
-                          : ""
-                      }
-                      onClick={() => {
-                        setSort("title", "desc");
-                        setFilterOpen(false);
-                      }}
-                    >
-                      Z–A
-                    </button>
-                  </div>
+        {/* RIGHT */}
+        <div className="nav-right">
+          <div className="search-and-filter-container">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (location.pathname !== "/books") {
+                  navigate(`/books?q=${searchQuery}&page=1`);
+                }
+              }}
+              className="search-form"
+            >
+              {/* STEP 1 & 2: Replaced <select> with Button + Dropdown */}
+              <div className="filter-wrapper" ref={filterRef}>
+                <button
+                  type="button"
+                  className={`filter-btn ${filterOpen ? "active" : ""}`}
+                  onClick={() => setFilterOpen((prev) => !prev)}
+                  title="Filter & Sort"
+                  aria-expanded={filterOpen}
+                >
+                  <img src={filterIcon} alt="Filter" className="filter-icon" />
+                </button>
 
-                  <div className="dropdown-divider"></div>
-
-                  <div className="dropdown-section">
-                    <h4>Genre</h4>
-                    <button
-                      type="button"
-                      className={!currentGenre ? "active" : ""}
-                      onClick={() => {
-                        setGenre("");
-                        setFilterOpen(false);
-                      }}
-                    >
-                      All Genres
-                    </button>
-                    {genres.map((g) => (
+                {filterOpen && (
+                  <div className="filter-dropdown">
+                    <div className="dropdown-section">
+                      <h4>Sort By</h4>
                       <button
-                        key={g}
                         type="button"
-                        className={currentGenre === g ? "active" : ""}
+                        className={
+                          currentSort === "created_at" &&
+                          currentOrder === "desc"
+                            ? "active"
+                            : ""
+                        }
                         onClick={() => {
-                          setGenre(g);
+                          setSort("created_at", "desc");
                           setFilterOpen(false);
                         }}
                       >
-                        {g}
+                        Newest added
                       </button>
-                    ))}
-                  </div>
+                      <button
+                        type="button"
+                        className={
+                          currentSort === "created_at" && currentOrder === "asc"
+                            ? "active"
+                            : ""
+                        }
+                        onClick={() => {
+                          setSort("created_at", "asc");
+                          setFilterOpen(false);
+                        }}
+                      >
+                        Oldest added
+                      </button>
+                      <button
+                        type="button"
+                        className={
+                          currentSort === "title" && currentOrder === "asc"
+                            ? "active"
+                            : ""
+                        }
+                        onClick={() => {
+                          setSort("title", "asc");
+                          setFilterOpen(false);
+                        }}
+                      >
+                        A–Z
+                      </button>
+                      <button
+                        type="button"
+                        className={
+                          currentSort === "title" && currentOrder === "desc"
+                            ? "active"
+                            : ""
+                        }
+                        onClick={() => {
+                          setSort("title", "desc");
+                          setFilterOpen(false);
+                        }}
+                      >
+                        Z–A
+                      </button>
+                    </div>
 
-                  <div className="dropdown-divider"></div>
+                    <div className="dropdown-divider"></div>
 
-                  <button
-                    type="button"
-                    className="clear-all-btn"
-                    onClick={clearAllFilters}
-                  >
-                    Clear All Filters
-                  </button>
-                </div>
-              )}
-            </div>
+                    <div className="dropdown-section">
+                      <h4>Genre</h4>
+                      <button
+                        type="button"
+                        className={!currentGenre ? "active" : ""}
+                        onClick={() => {
+                          setGenre("");
+                          setFilterOpen(false);
+                        }}
+                      >
+                        All Genres
+                      </button>
+                      {genres.map((g) => (
+                        <button
+                          key={g}
+                          type="button"
+                          className={currentGenre === g ? "active" : ""}
+                          onClick={() => {
+                            setGenre(g);
+                            setFilterOpen(false);
+                          }}
+                        >
+                          {g}
+                        </button>
+                      ))}
+                    </div>
 
-            <input
-              type="text"
-              placeholder={searchPlaceholder}
-              value={searchQuery}
-              onChange={handleSearch}
-              className="search-input"
-            />
-          </form>
+                    <div className="dropdown-divider"></div>
 
-          {/* STEP 3: Active Filter Chips */}
-          {/* We only show this container if there is an active genre OR a non-default sort */}
-          {(currentGenre ||
-            currentSort !== "title" ||
-            currentOrder !== "asc") && (
-            <div className="active-filters-wrapper">
-              <div className="active-filters">
-                {currentGenre && (
-                  <span className="filter-chip">
-                    {currentGenre}
-                    <button onClick={() => setGenre("")} title="Remove genre">
-                      ✕
-                    </button>
-                  </span>
-                )}
-
-                {/* Show sort chip if it is NOT the default (A-Z) */}
-                {(currentSort !== "title" || currentOrder !== "asc") && (
-                  <span className="filter-chip">
-                    {getSortLabel()}
                     <button
-                      onClick={() => setSort("title", "asc")}
-                      title="Reset sort"
+                      type="button"
+                      className="clear-all-btn"
+                      onClick={clearAllFilters}
                     >
-                      ✕
+                      Clear All Filters
                     </button>
-                  </span>
+                  </div>
                 )}
-
-                <button className="clear-chip" onClick={clearAllFilters}>
-                  Clear all
-                </button>
               </div>
-            </div>
-          )}
+
+              <input
+                type="text"
+                placeholder={searchPlaceholder}
+                value={searchQuery}
+                onChange={handleSearch}
+                className="search-input"
+              />
+            </form>
+          </div>
         </div>
+        <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
+      </nav>
+      <div className="navbar-spacer" />
+      {(currentGenre || currentSort !== "title" || currentOrder !== "asc") && (
+        <div className="active-filters-wrapper">
+          <div className="active-filters">
+            {currentGenre && (
+              <span className="filter-chip">
+                {currentGenre}
+                <button onClick={() => setGenre("")} title="Remove genre">
+                  ✕
+                </button>
+              </span>
+            )}
 
-        <button
-          className="hamburger"
-          onClick={() => setMenuOpen((prev) => !prev)}
-        >
-          ☰
-        </button>
-      </div>
+            {/* Show sort chip if it is NOT the default (A-Z) */}
+            {(currentSort !== "title" || currentOrder !== "asc") && (
+              <span className="filter-chip">
+                {getSortLabel()}
+                <button
+                  onClick={() => setSort("title", "asc")}
+                  title="Reset sort"
+                >
+                  ✕
+                </button>
+              </span>
+            )}
 
-      {/* MENU */}
-      <div className={`nav-menu ${menuOpen ? "open" : ""}`}>
-        <Link to="/books">All Books</Link>
-
-        {isAuthenticated ? (
-          <>
-            <NavLink to="/my-books">My Books</NavLink>
-            <NavLink to="/reading-list">Reading List</NavLink>
-            <NavLink to="/add">Add Book</NavLink>
-            <NavLink to="/account">Account</NavLink>
-            <button className="logout-btn" onClick={handleLogout}>
-              Logout
+            <button className="clear-chip" onClick={clearAllFilters}>
+              Clear all
             </button>
-          </>
-        ) : (
-          <>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/register">Register</NavLink>
-          </>
-        )}
-      </div>
-    </nav>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

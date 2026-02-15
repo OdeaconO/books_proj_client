@@ -7,6 +7,16 @@ const BookCard = ({ book, q, user, isAuthenticated, onDelete, footer }) => {
   const isUserBook = Boolean(book.user_id);
   const navigate = useNavigate();
 
+  const isWithinEditWindow = () => {
+    if (!book.created_at) return false;
+
+    const createdAt = new Date(book.created_at);
+    const now = new Date();
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    return now - createdAt <= oneDay;
+  };
+
   return (
     <div
       className={`book ${book.currently_reading ? "reading" : ""}`}
@@ -31,15 +41,9 @@ const BookCard = ({ book, q, user, isAuthenticated, onDelete, footer }) => {
 
       <h2 className="mark">{highlightText(book.title, q)}</h2>
 
-      <p className="meta">
-        <strong>Author:</strong> {book.authors}
-      </p>
+      <p className="meta">{book.authors}</p>
 
-      {book.genre && (
-        <p className="meta">
-          <strong>Genre:</strong> {book.genre}
-        </p>
-      )}
+      {book.genre && <p className="meta">{book.genre}</p>}
 
       {isUserBook && book.username && (
         <p className="meta">
@@ -58,7 +62,8 @@ const BookCard = ({ book, q, user, isAuthenticated, onDelete, footer }) => {
 
       {/* Admin / Owner actions */}
       {isAuthenticated &&
-        (user.role === "admin" || user.id === book.user_id) && (
+        (user.role === "admin" ||
+          (user.id === book.user_id && isWithinEditWindow())) && (
           <div className="actions">
             <button
               className="delete"
@@ -67,14 +72,14 @@ const BookCard = ({ book, q, user, isAuthenticated, onDelete, footer }) => {
                 onDelete(book.id);
               }}
             >
-              Delete
+              DELETE
             </button>
             <button className="update" onClick={(e) => e.stopPropagation()}>
               <Link
                 to={`/update/${book.id}`}
                 onClick={(e) => e.stopPropagation()}
               >
-                Update
+                UPDATE
               </Link>
             </button>
           </div>

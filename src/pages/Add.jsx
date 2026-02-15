@@ -1,6 +1,7 @@
 import { api } from "../api";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import uploadIcon from "../assets/upload-icon.svg";
 
 const Add = () => {
   const [book, setBook] = useState({
@@ -10,15 +11,20 @@ const Add = () => {
     desc: "",
   });
 
-  const GENRES = [
-    "fantasy",
-    "sci-fi",
-    "romance",
-    "mystery",
-    "horror",
-    "thriller",
-    "true crime",
-  ];
+  const [genres, setGenres] = useState([]);
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const res = await api.get("/genres");
+        setGenres(res.data);
+      } catch (err) {
+        console.error("Failed to load genres", err);
+      }
+    };
+
+    fetchGenres();
+  }, []);
 
   const [file, setFile] = useState(null);
 
@@ -55,59 +61,68 @@ const Add = () => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h1>Add new book</h1>
-      <input
-        type="text"
-        placeholder="Title"
-        name="title"
-        value={book.title}
-        onChange={handleChange}
-      />
+    <div className="page">
+      <main className="page-content">
+        <div className="form-card">
+          <form className="form" onSubmit={handleSubmit}>
+            <h1>ADD A NEW BOOK!</h1>
+            <input
+              type="text"
+              placeholder="Title"
+              name="title"
+              value={book.title}
+              onChange={handleChange}
+            />
 
-      <input
-        type="text"
-        placeholder="Authors"
-        name="authors"
-        value={book.authors}
-        onChange={handleChange}
-      />
+            <input
+              type="text"
+              placeholder="Authors"
+              name="authors"
+              value={book.authors}
+              onChange={handleChange}
+            />
 
-      <label>
-        Genre:
-        <select
-          name="genre"
-          value={book.genre}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select a genre</option>
-          {GENRES.map((g) => (
-            <option key={g} value={g}>
-              {g.charAt(0).toUpperCase() + g.slice(1)}
-            </option>
-          ))}
-        </select>
-      </label>
+            <label>
+              <select
+                name="genre"
+                value={book.genre}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select a genre</option>
+                {genres.map((g) => (
+                  <option key={g} value={g}>
+                    {g.charAt(0).toUpperCase() + g.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-      <input
-        type="text"
-        placeholder="Description"
-        name="desc"
-        value={book.desc}
-        onChange={handleChange}
-      />
+            <input
+              type="text"
+              placeholder="Description"
+              name="desc"
+              value={book.desc}
+              onChange={handleChange}
+            />
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
+            <label className="upload-btn">
+              <img src={uploadIcon} alt="Upload" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files[0])}
+                hidden
+              />
+            </label>
 
-      <button type="submit" className="formButton">
-        Add
-      </button>
-    </form>
+            <button type="submit" className="formButton">
+              Add
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 };
 

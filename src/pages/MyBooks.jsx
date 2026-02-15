@@ -58,7 +58,7 @@ const MyBooks = () => {
   return (
     <div className="page">
       <main className="page-content">
-        <h1>My Books</h1>
+        <h1>MY BOOKS</h1>
 
         {/* 1. Empty State Check */}
         {Array.isArray(books) && books.length === 0 && (

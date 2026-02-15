@@ -1,6 +1,7 @@
 import { api } from "../api";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import uploadIcon from "../assets/upload-icon.svg";
 
 const Update = () => {
   const [book, setBook] = useState({
@@ -10,15 +11,7 @@ const Update = () => {
     desc: "",
   });
 
-  const GENRES = [
-    "fantasy",
-    "sci-fi",
-    "romance",
-    "mystery",
-    "horror",
-    "thriller",
-    "true crime",
-  ];
+  const [genres, setGenres] = useState([]);
 
   const [file, setFile] = useState(null);
 
@@ -38,10 +31,10 @@ const Update = () => {
       try {
         const res = await api.get(`/books/${bookId}`);
         setBook({
-          title: res.data.title,
-          authors: res.data.authors,
-          genre: res.data.genre,
-          desc: res.data.desc,
+          title: res.data.title ?? "",
+          authors: res.data.authors ?? "",
+          genre: res.data.genre ?? "",
+          desc: res.data.desc ?? "",
         });
       } catch (err) {
         console.error(err);
@@ -50,6 +43,19 @@ const Update = () => {
 
     fetchBook();
   }, [bookId]);
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const res = await api.get("/genres");
+        setGenres(res.data);
+      } catch (err) {
+        console.error("Failed to load genres", err);
+      }
+    };
+
+    fetchGenres();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,59 +87,68 @@ const Update = () => {
   console.log(book);
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h1>Update book</h1>
-      <input
-        type="text"
-        placeholder="Title"
-        name="title"
-        value={book.title}
-        onChange={handleChange}
-      />
+    <div className="page">
+      <main className="page-content">
+        <div className="form-card">
+          <form className="form" onSubmit={handleSubmit}>
+            <h1>UPDATE THIS BOOK!</h1>
+            <input
+              type="text"
+              placeholder="Title"
+              name="title"
+              value={book.title}
+              onChange={handleChange}
+            />
 
-      <input
-        type="text"
-        placeholder="Authors"
-        name="authors"
-        value={book.authors}
-        onChange={handleChange}
-      />
+            <input
+              type="text"
+              placeholder="Authors"
+              name="authors"
+              value={book.authors}
+              onChange={handleChange}
+            />
 
-      <label>
-        Genre:
-        <select
-          name="genre"
-          value={book.genre}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select a genre</option>
-          {GENRES.map((g) => (
-            <option key={g} value={g}>
-              {g.charAt(0).toUpperCase() + g.slice(1)}
-            </option>
-          ))}
-        </select>
-      </label>
+            <label>
+              <select
+                name="genre"
+                value={book.genre}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select a genre</option>
+                {genres.map((g) => (
+                  <option key={g} value={g}>
+                    {g.charAt(0).toUpperCase() + g.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-      <input
-        type="text"
-        placeholder="Description"
-        name="desc"
-        value={book.desc}
-        onChange={handleChange}
-      />
+            <input
+              type="text"
+              placeholder="Description"
+              name="desc"
+              value={book.desc}
+              onChange={handleChange}
+            />
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
+            <label className="upload-btn">
+              <img src={uploadIcon} alt="Upload" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files[0])}
+                hidden
+              />
+            </label>
 
-      <button type="submit" className="formButton">
-        Update
-      </button>
-    </form>
+            <button type="submit" className="formButton">
+              Update
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 };
 

@@ -30,31 +30,37 @@ const Login = () => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h1>Login</h1>
+    <div className="page">
+      <main className="page-content">
+        <div className="form-card auth-card">
+          <form className="form" onSubmit={handleSubmit}>
+            <h1>Login</h1>
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Enter your email"
-        onChange={handleChange}
-      />
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              onChange={handleChange}
+            />
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Enter your password"
-        onChange={handleChange}
-      />
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              onChange={handleChange}
+            />
 
-      <button type="submit" className="loginButton">
-        Login
-      </button>
+            <button type="submit" className="formButton">
+              Login
+            </button>
 
-      <p style={{ marginTop: "10px" }}>
-        Don't have an account? <Link to="/register">Register here</Link>
-      </p>
-    </form>
+            <p className="auth-switch">
+              Don't have an account? <Link to="/register">Register here</Link>
+            </p>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 };
 

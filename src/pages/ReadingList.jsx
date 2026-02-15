@@ -94,7 +94,7 @@ const ReadingList = () => {
   return (
     <div className="page">
       <main className="page-content">
-        <h1>Reading List</h1>
+        <h1>READING LIST</h1>
 
         {books.length === 0 ? (
           <div className="empty-state">

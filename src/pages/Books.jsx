@@ -76,6 +76,7 @@ const Books = () => {
   return (
     <div className="page">
       <main className="page-content">
+        <h1>ALL BOOKS</h1>
         {books.length === 0 ? (
           <div className="empty-state">
             <h2>No books found 📚</h2>

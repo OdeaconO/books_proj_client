@@ -30,39 +30,44 @@ const Register = () => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h1>Register</h1>
+    <div className="page">
+      <main className="page-content">
+        <div className="form-card auth-card">
+          <form className="form" onSubmit={handleSubmit}>
+            <h1>Register</h1>
 
-      <input
-        type="text"
-        name="username"
-        placeholder="Enter username"
-        onChange={handleChange}
-      />
+            <input
+              type="text"
+              name="username"
+              placeholder="Enter username"
+              onChange={handleChange}
+            />
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Enter email"
-        onChange={handleChange}
-      />
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter email"
+              onChange={handleChange}
+            />
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Enter password"
-        onChange={handleChange}
-      />
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              onChange={handleChange}
+            />
 
-      <button type="submit" className="loginButton">
-        Register
-      </button>
+            <button type="submit" className="formButton">
+              Register
+            </button>
 
-      <p style={{ marginTop: "10px" }}>
-        Already have an account?{" "}
-        <Link to="/login">Login here</Link>
-      </p>
-    </form>
+            <p className="auth-switch">
+              Already have an account? <Link to="/login">Login here</Link>
+            </p>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 };
 

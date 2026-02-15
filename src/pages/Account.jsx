@@ -8,24 +8,30 @@ const Account = () => {
   if (!user) return null;
 
   return (
-    <div className="form">
-      <h1>Account</h1>
+    <div className="page">
+      <main className="page-content">
+        <div className="form-card account-card">
+          <div className="form">
+            <h1>ACCOUNT DETAILS</h1>
 
-      <p>
-        <strong>User ID:</strong> {user.id}
-      </p>
+            <p>
+              <strong>User ID:</strong> {user.id}
+            </p>
 
-      <p>
-        <strong>Username:</strong> {user.username}
-      </p>
+            <p>
+              <strong>Username:</strong> {user.username}
+            </p>
 
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
 
-      <button className="loginButton" onClick={logout}>
-        Logout
-      </button>
+            <button className="formButton" onClick={logout}>
+              Logout
+            </button>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
