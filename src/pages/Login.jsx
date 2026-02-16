@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -22,6 +23,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await api.post("/auth/login", inputs);
@@ -29,6 +31,8 @@ const Login = () => {
       navigate("/books");
     } catch (err) {
       setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,8 +63,8 @@ const Login = () => {
               required
             />
 
-            <button type="submit" className="formButton">
-              Login
+            <button type="submit" className="formButton" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
             </button>
 
             <p className="auth-switch">

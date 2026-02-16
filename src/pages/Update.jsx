@@ -5,6 +5,7 @@ import uploadIcon from "../assets/upload-icon.svg";
 
 const Update = () => {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [book, setBook] = useState({
     title: "",
@@ -68,6 +69,8 @@ const Update = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
       const formData = new FormData();
       formData.append("title", book.title);
@@ -89,6 +92,8 @@ const Update = () => {
       navigate("/my-books");
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -155,8 +160,8 @@ const Update = () => {
               />
             </label>
 
-            <button type="submit" className="formButton">
-              Update
+            <button type="submit" className="formButton" disabled={loading}>
+              {loading ? "Updating..." : "Update"}
             </button>
           </form>
         </div>

@@ -5,6 +5,7 @@ import uploadIcon from "../assets/upload-icon.svg";
 
 const Add = () => {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [book, setBook] = useState({
     title: "",
@@ -44,6 +45,9 @@ const Add = () => {
       setError("Title and Authors are required");
       return;
     }
+
+    setLoading(true);
+
     try {
       const formData = new FormData();
       formData.append("title", book.title);
@@ -64,6 +68,8 @@ const Add = () => {
       navigate("/my-books");
     } catch (err) {
       setError("Failed to add book");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,8 +134,8 @@ const Add = () => {
               />
             </label>
 
-            <button type="submit" className="formButton">
-              Add
+            <button type="submit" className="formButton" disabled={loading}>
+              {loading ? "Adding..." : "Add"}
             </button>
           </form>
         </div>

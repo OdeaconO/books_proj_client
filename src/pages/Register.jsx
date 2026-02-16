@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [inputs, setInputs] = useState({
     username: "",
@@ -23,17 +24,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
-    if (!inputs.username || !inputs.email || !inputs.password) {
-      setError("All fields are required");
-      return;
-    }
+    setLoading(true);
 
     try {
       await api.post("/auth/register", inputs);
       navigate("/login");
     } catch (err) {
-      setError("Registration failed. Email may already exist.");
+      setError("Registration failed. Email may already be in use.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,8 +72,8 @@ const Register = () => {
               required
             />
 
-            <button type="submit" className="formButton">
-              Register
+            <button type="submit" className="formButton" disabled={loading}>
+              {loading ? "Registering..." : "Register"}
             </button>
 
             <p className="auth-switch">
