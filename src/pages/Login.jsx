@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const [error, setError] = useState("");
+
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -19,13 +21,14 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
       const res = await api.post("/auth/login", inputs);
       login(res.data.token);
       navigate("/books");
     } catch (err) {
-      console.log(err.response?.data || err.message);
+      setError("Invalid email or password");
     }
   };
 
@@ -36,18 +39,24 @@ const Login = () => {
           <form className="form" onSubmit={handleSubmit}>
             <h1>Login</h1>
 
+            {error && <div className="form-error">{error}</div>}
+
             <input
               type="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="Enter your email..."
+              value={inputs.email}
               onChange={handleChange}
+              required
             />
 
             <input
               type="password"
               name="password"
-              placeholder="Enter your password"
+              placeholder="Enter your password..."
+              value={inputs.password}
               onChange={handleChange}
+              required
             />
 
             <button type="submit" className="formButton">

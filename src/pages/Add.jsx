@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import uploadIcon from "../assets/upload-icon.svg";
 
 const Add = () => {
+  const [error, setError] = useState("");
+
   const [book, setBook] = useState({
     title: "",
     authors: "",
@@ -36,7 +38,12 @@ const Add = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
+    if (!book.title.trim() || !book.authors.trim()) {
+      setError("Title and Authors are required");
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("title", book.title);
@@ -56,7 +63,7 @@ const Add = () => {
 
       navigate("/my-books");
     } catch (err) {
-      console.error(err);
+      setError("Failed to add book");
     }
   };
 
@@ -66,20 +73,25 @@ const Add = () => {
         <div className="form-card">
           <form className="form" onSubmit={handleSubmit}>
             <h1>ADD A NEW BOOK!</h1>
+
+            {error && <div className="form-error">{error}</div>}
+
             <input
               type="text"
-              placeholder="Title"
               name="title"
               value={book.title}
               onChange={handleChange}
+              placeholder="Add title..."
+              required
             />
 
             <input
               type="text"
-              placeholder="Authors"
               name="authors"
               value={book.authors}
               onChange={handleChange}
+              placeholder="Add author(s)..."
+              required
             />
 
             <label>

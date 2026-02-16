@@ -1108,6 +1108,16 @@ mark {
   cursor: pointer;
 }
 
+.form-error {
+  background: rgba(246, 192, 145, 0.35);
+  color: #f6c091;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
 @media (min-width: 1200px) {
   .App {
     padding-left: 100px;
@@ -1165,4 +1175,28 @@ mark {
     display: block;
     align-self: center;
   }
+}
+
+/* ===== Autofill Fix (Global) ===== */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #f6c091 !important;
+
+  transition: background-color 9999s ease-in-out 0s;
+
+  box-shadow: 0 0 0px 1000px #292d30 inset !important;
+
+  border: 1px solid rgba(246, 192, 145, 0.25) !important;
+}
+
+input:-webkit-autofill:focus {
+  box-shadow:
+    0 0 0px 1000px #292d30 inset,
+    0 0 0 2px rgba(252, 40, 46, 0.45) !important;
+
+  border-color: #fc282e !important;
 }

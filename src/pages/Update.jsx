@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import uploadIcon from "../assets/upload-icon.svg";
 
 const Update = () => {
+  const [error, setError] = useState("");
+
   const [book, setBook] = useState({
     title: "",
     authors: "",
@@ -59,6 +61,12 @@ const Update = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!book.title.trim() || !book.authors.trim()) {
+      setError("Title and Authors are required");
+      return;
+    }
 
     try {
       const formData = new FormData();
@@ -92,20 +100,25 @@ const Update = () => {
         <div className="form-card">
           <form className="form" onSubmit={handleSubmit}>
             <h1>UPDATE THIS BOOK!</h1>
+
+            {error && <div className="form-error">{error}</div>}
+
             <input
               type="text"
-              placeholder="Title"
               name="title"
               value={book.title}
               onChange={handleChange}
+              placeholder="Add title..."
+              required
             />
 
             <input
               type="text"
-              placeholder="Authors"
               name="authors"
               value={book.authors}
               onChange={handleChange}
+              placeholder="Add author(s)..."
+              required
             />
 
             <label>

@@ -3,6 +3,8 @@ import { api } from "../api";
 import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
+  const [error, setError] = useState("");
+
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
@@ -20,12 +22,18 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!inputs.username || !inputs.email || !inputs.password) {
+      setError("All fields are required");
+      return;
+    }
 
     try {
       await api.post("/auth/register", inputs);
       navigate("/login");
     } catch (err) {
-      console.log(err.response?.data || err.message);
+      setError("Registration failed. Email may already exist.");
     }
   };
 
@@ -36,25 +44,33 @@ const Register = () => {
           <form className="form" onSubmit={handleSubmit}>
             <h1>Register</h1>
 
+            {error && <div className="form-error">{error}</div>}
+
             <input
               type="text"
               name="username"
-              placeholder="Enter username"
+              placeholder="Enter username..."
+              value={inputs.username}
               onChange={handleChange}
+              required
             />
 
             <input
               type="email"
               name="email"
-              placeholder="Enter email"
+              placeholder="Enter email..."
+              value={inputs.email}
               onChange={handleChange}
+              required
             />
 
             <input
               type="password"
               name="password"
-              placeholder="Enter password"
+              placeholder="Enter password..."
+              value={inputs.password}
               onChange={handleChange}
+              required
             />
 
             <button type="submit" className="formButton">
