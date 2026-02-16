@@ -1118,6 +1118,30 @@ mark {
   text-align: center;
 }
 
+/* ===== Page Loader ===== */
+
+.page-loader {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(252, 40, 46, 0.2);
+  border-top: 3px solid #fc282e;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (min-width: 1200px) {
   .App {
     padding-left: 100px;

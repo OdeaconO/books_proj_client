@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import PaginationFooter from "../components/PaginationFooter";
 import { useSearchPagination } from "../hooks/useSearchPagination";
+import PageLoader from "../components/PageLoader";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -12,23 +13,30 @@ const Books = () => {
   const { user, isAuthenticated } = useAuth();
   const { q, page, debouncedQ, genre, sort, order, setPage } =
     useSearchPagination();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllBooks = async () => {
-      const res = await api.get("/books", {
-        params: {
-          q: debouncedQ,
-          page,
-          genre,
-          sort,
-          order,
-        },
-      });
+      try {
+        setLoading(true);
 
-      console.log("DEBUG: API Data", res.data.books);
+        const res = await api.get("/books", {
+          params: {
+            q: debouncedQ,
+            page,
+            genre,
+            sort,
+            order,
+          },
+        });
 
-      setBooks(res.data.books);
-      setPagination(res.data.pagination);
+        setBooks(res.data.books);
+        setPagination(res.data.pagination);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchAllBooks();
@@ -72,6 +80,10 @@ const Books = () => {
       console.log(err);
     }
   };
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="page">

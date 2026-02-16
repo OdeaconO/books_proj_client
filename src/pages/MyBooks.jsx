@@ -2,20 +2,24 @@ import { useEffect, useState } from "react";
 import { api } from "../api";
 import { Link } from "react-router-dom";
 import PaginationFooter from "../components/PaginationFooter";
-import { useAuth } from "../context/AuthContext"; // 👈 Need this for BookCard
+import { useAuth } from "../context/AuthContext";
 import { useSearchPagination } from "../hooks/useSearchPagination";
-import BookCard from "../components/BookCard"; // 👈 Import your new component
+import BookCard from "../components/BookCard";
+import PageLoader from "../components/PageLoader";
 
 const MyBooks = () => {
   const [books, setBooks] = useState([]);
   const [pagination, setPagination] = useState(null);
-  const { user, isAuthenticated } = useAuth(); // 👈 Get user info
+  const { user, isAuthenticated } = useAuth();
   const { q, debouncedQ, page, genre, sort, order, setPage } =
     useSearchPagination();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMyBooks = async () => {
       try {
+        setLoading(true);
+
         const res = await api.get("/my-books", {
           params: {
             q: debouncedQ,
@@ -32,6 +36,8 @@ const MyBooks = () => {
         console.error(err);
         setBooks([]);
         setPagination(null);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -54,6 +60,10 @@ const MyBooks = () => {
       console.error(err);
     }
   };
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="page">

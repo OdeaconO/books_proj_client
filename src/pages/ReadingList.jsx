@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import BookCard from "../components/BookCard";
 import PaginationFooter from "../components/PaginationFooter";
 import { useSearchPagination } from "../hooks/useSearchPagination";
+import PageLoader from "../components/PageLoader";
 
 const ReadingList = () => {
   const { user, isAuthenticated } = useAuth();
@@ -17,6 +18,8 @@ const ReadingList = () => {
   useEffect(() => {
     const fetchReadingList = async () => {
       try {
+        setLoading(true);
+
         const res = await api.get("/reading-list", {
           params: {
             q: debouncedQ,
@@ -82,13 +85,7 @@ const ReadingList = () => {
   };
 
   if (loading) {
-    return (
-      <div className="page">
-        <main className="page-content">
-          <p>Loading reading list…</p>
-        </main>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (
