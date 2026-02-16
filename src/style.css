@@ -1049,10 +1049,31 @@ mark {
   height: auto;
 }
 
-.cover-card img {
+.book-image-wrapper {
+  position: relative;
+  display: inline-block;
   width: 100%;
   max-width: clamp(220px, 30vw, 340px);
+}
+
+.book-image {
+  width: 100%;
   height: auto;
+  border-radius: 8px;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.book-image.loaded {
+  opacity: 1;
+}
+
+.image-skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: rgba(252, 40, 46, 0.12);
 }
 
 .info-card {

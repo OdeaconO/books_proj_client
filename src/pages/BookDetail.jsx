@@ -4,9 +4,11 @@ import { api } from "../api";
 import { getCoverUrl } from "../utils/getCoverUrl";
 import placeholder from "../assets/cover-placeholder.svg";
 import { useBookActions } from "../hooks/useBookActions";
+import PageLoader from "../components/PageLoader";
 
 const BookDetail = () => {
   const { id } = useParams();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -24,6 +26,7 @@ const BookDetail = () => {
       try {
         const res = await api.get(`/books/${id}`);
         setBook(res.data);
+        setImageLoaded(false);
       } catch (err) {
         console.error(err);
         setError("Book not found");
@@ -67,13 +70,7 @@ const BookDetail = () => {
   };
 
   if (loading) {
-    return (
-      <div className="page">
-        <main className="page-content">
-          <p>Loading…</p>
-        </main>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   if (error) {
@@ -91,14 +88,21 @@ const BookDetail = () => {
       <main className="page-content">
         <div className="book-detail">
           <div className="card cover-card">
-            <img
-              src={getCoverUrl(book, "L")}
-              alt={book.title}
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = placeholder;
-              }}
-            />
+            <div className="book-image-wrapper">
+              {!imageLoaded && <div className="image-skeleton"></div>}
+
+              <img
+                src={getCoverUrl(book, "L")}
+                alt={book.title}
+                className={`book-image ${imageLoaded ? "loaded" : ""}`}
+                onLoad={() => setImageLoaded(true)}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = placeholder;
+                  setImageLoaded(true);
+                }}
+              />
+            </div>
           </div>
 
           <div className="card info-card">
