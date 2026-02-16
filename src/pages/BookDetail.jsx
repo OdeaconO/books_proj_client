@@ -94,7 +94,6 @@ const BookDetail = () => {
             <img
               src={getCoverUrl(book, "L")}
               alt={book.title}
-              loading="lazy"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = placeholder;
