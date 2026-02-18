@@ -39,51 +39,53 @@ const BookCard = ({ book, q, user, isAuthenticated, onDelete, footer }) => {
         }}
       />
 
-      <h2 className="mark">{highlightText(book.title, q)}</h2>
+      <div className="book-content">
+        <h2 className="mark">{highlightText(book.title, q)}</h2>
 
-      <p className="meta">{book.authors}</p>
+        <p className="meta">{book.authors}</p>
 
-      {book.genre && <p className="meta">{book.genre}</p>}
+        {book.genre && <p className="meta">{book.genre}</p>}
 
-      {isUserBook && book.username && (
-        <p className="meta">
-          <strong>Recommended by:</strong> {book.username}
-        </p>
-      )}
+        {isUserBook && book.username && (
+          <p className="meta">
+            <strong>Recommended by:</strong> {book.username}
+          </p>
+        )}
 
-      {/* ✅ THIS IS THE CORRECT PLACE FOR YOUR NEW BUTTONS */}
-      {/* (Visually between the meta info and the admin/delete buttons) */}
+        {/* ✅ THIS IS THE CORRECT PLACE FOR YOUR NEW BUTTONS */}
+        {/* (Visually between the meta info and the admin/delete buttons) */}
 
-      {footer && (
-        <div className="book-footer" onClick={(e) => e.stopPropagation()}>
-          {footer}
-        </div>
-      )}
-
-      {/* Admin / Owner actions */}
-      {isAuthenticated &&
-        (user.role === "admin" ||
-          (user.id === book.user_id && isWithinEditWindow())) && (
-          <div className="actions">
-            <button
-              className="delete"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(book.id);
-              }}
-            >
-              DELETE
-            </button>
-            <button className="update" onClick={(e) => e.stopPropagation()}>
-              <Link
-                to={`/update/${book.id}`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                UPDATE
-              </Link>
-            </button>
+        {footer && (
+          <div className="book-footer" onClick={(e) => e.stopPropagation()}>
+            {footer}
           </div>
         )}
+
+        {/* Admin / Owner actions */}
+        {isAuthenticated &&
+          (user.role === "admin" ||
+            (user.id === book.user_id && isWithinEditWindow())) && (
+            <div className="actions">
+              <button
+                className="delete"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(book.id);
+                }}
+              >
+                DELETE
+              </button>
+              <button className="update" onClick={(e) => e.stopPropagation()}>
+                <Link
+                  to={`/update/${book.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  UPDATE
+                </Link>
+              </button>
+            </div>
+          )}
+      </div>
     </div>
   );
 };

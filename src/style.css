@@ -60,7 +60,6 @@ body {
   background: #396b6e;
   color: #f6c091;
 
-  padding: 12px;
   border-radius: 6px;
 
   box-shadow:
@@ -69,6 +68,15 @@ body {
   transition:
     box-shadow 0.15s ease,
     transform 0.12s ease;
+}
+
+.book-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
 }
 
 .book:hover {
@@ -598,7 +606,7 @@ mark {
   bottom: 0;
   z-index: 10;
   margin-top: auto;
-  padding: 16px 0 20px;
+  padding: 10px 0 10px;
 
   background: #292d30;
   border-top: 1px solid rgba(246, 192, 145, 0.15);
