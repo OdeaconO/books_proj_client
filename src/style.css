@@ -10,7 +10,7 @@ body::before {
   inset: 0;
   z-index: -1;
 
-  background-image: url("./assets/background-all.jpg");
+  background-image: url("./assets/background-all.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
