@@ -33,7 +33,7 @@ const Navbar = () => {
     ? "Search your books..."
     : isBooksPage
       ? "Search all books..."
-      : "Search books";
+      : "Search reading list...";
 
   const { setGenre, setSort } = useSearchPagination();
   const [genres, setGenres] = useState([]);
