@@ -91,7 +91,7 @@ const Books = () => {
         <h1>ALL BOOKS</h1>
         {books.length === 0 ? (
           <div className="empty-state">
-            <h2>No books found 📚</h2>
+            <h2>No books found with this title 📚</h2>
             <p>
               {q
                 ? "Try a different search keyword."
